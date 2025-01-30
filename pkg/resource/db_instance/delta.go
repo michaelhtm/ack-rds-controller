@@ -206,6 +206,13 @@ func newResourceDelta(
 	if !reflect.DeepEqual(a.ko.Spec.DBSubnetGroupRef, b.ko.Spec.DBSubnetGroupRef) {
 		delta.Add("Spec.DBSubnetGroupRef", a.ko.Spec.DBSubnetGroupRef, b.ko.Spec.DBSubnetGroupRef)
 	}
+	if ackcompare.HasNilDifference(a.ko.Spec.DBSystemID, b.ko.Spec.DBSystemID) {
+		delta.Add("Spec.DBSystemID", a.ko.Spec.DBSystemID, b.ko.Spec.DBSystemID)
+	} else if a.ko.Spec.DBSystemID != nil && b.ko.Spec.DBSystemID != nil {
+		if *a.ko.Spec.DBSystemID != *b.ko.Spec.DBSystemID {
+			delta.Add("Spec.DBSystemID", a.ko.Spec.DBSystemID, b.ko.Spec.DBSystemID)
+		}
+	}
 	if ackcompare.HasNilDifference(a.ko.Spec.DeletionProtection, b.ko.Spec.DeletionProtection) {
 		delta.Add("Spec.DeletionProtection", a.ko.Spec.DeletionProtection, b.ko.Spec.DeletionProtection)
 	} else if a.ko.Spec.DeletionProtection != nil && b.ko.Spec.DeletionProtection != nil {
@@ -227,11 +234,25 @@ func newResourceDelta(
 			delta.Add("Spec.Domain", a.ko.Spec.Domain, b.ko.Spec.Domain)
 		}
 	}
+	if ackcompare.HasNilDifference(a.ko.Spec.DomainFqdn, b.ko.Spec.DomainFqdn) {
+		delta.Add("Spec.DomainFqdn", a.ko.Spec.DomainFqdn, b.ko.Spec.DomainFqdn)
+	} else if a.ko.Spec.DomainFqdn != nil && b.ko.Spec.DomainFqdn != nil {
+		if *a.ko.Spec.DomainFqdn != *b.ko.Spec.DomainFqdn {
+			delta.Add("Spec.DomainFqdn", a.ko.Spec.DomainFqdn, b.ko.Spec.DomainFqdn)
+		}
+	}
 	if ackcompare.HasNilDifference(a.ko.Spec.DomainIAMRoleName, b.ko.Spec.DomainIAMRoleName) {
 		delta.Add("Spec.DomainIAMRoleName", a.ko.Spec.DomainIAMRoleName, b.ko.Spec.DomainIAMRoleName)
 	} else if a.ko.Spec.DomainIAMRoleName != nil && b.ko.Spec.DomainIAMRoleName != nil {
 		if *a.ko.Spec.DomainIAMRoleName != *b.ko.Spec.DomainIAMRoleName {
 			delta.Add("Spec.DomainIAMRoleName", a.ko.Spec.DomainIAMRoleName, b.ko.Spec.DomainIAMRoleName)
+		}
+	}
+	if ackcompare.HasNilDifference(a.ko.Spec.DomainOu, b.ko.Spec.DomainOu) {
+		delta.Add("Spec.DomainOu", a.ko.Spec.DomainOu, b.ko.Spec.DomainOu)
+	} else if a.ko.Spec.DomainOu != nil && b.ko.Spec.DomainOu != nil {
+		if *a.ko.Spec.DomainOu != *b.ko.Spec.DomainOu {
+			delta.Add("Spec.DomainOu", a.ko.Spec.DomainOu, b.ko.Spec.DomainOu)
 		}
 	}
 	if len(a.ko.Spec.EnableCloudwatchLogsExports) != len(b.ko.Spec.EnableCloudwatchLogsExports) {
@@ -260,6 +281,13 @@ func newResourceDelta(
 	} else if a.ko.Spec.Engine != nil && b.ko.Spec.Engine != nil {
 		if *a.ko.Spec.Engine != *b.ko.Spec.Engine {
 			delta.Add("Spec.Engine", a.ko.Spec.Engine, b.ko.Spec.Engine)
+		}
+	}
+	if ackcompare.HasNilDifference(a.ko.Spec.EngineLifecycleSupport, b.ko.Spec.EngineLifecycleSupport) {
+		delta.Add("Spec.EngineLifecycleSupport", a.ko.Spec.EngineLifecycleSupport, b.ko.Spec.EngineLifecycleSupport)
+	} else if a.ko.Spec.EngineLifecycleSupport != nil && b.ko.Spec.EngineLifecycleSupport != nil {
+		if *a.ko.Spec.EngineLifecycleSupport != *b.ko.Spec.EngineLifecycleSupport {
+			delta.Add("Spec.EngineLifecycleSupport", a.ko.Spec.EngineLifecycleSupport, b.ko.Spec.EngineLifecycleSupport)
 		}
 	}
 	if ackcompare.HasNilDifference(a.ko.Spec.EngineVersion, b.ko.Spec.EngineVersion) {

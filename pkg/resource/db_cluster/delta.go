@@ -198,6 +198,20 @@ func newResourceDelta(
 			delta.Add("Spec.EnableIAMDatabaseAuthentication", a.ko.Spec.EnableIAMDatabaseAuthentication, b.ko.Spec.EnableIAMDatabaseAuthentication)
 		}
 	}
+	if ackcompare.HasNilDifference(a.ko.Spec.EnableLimitlessDatabase, b.ko.Spec.EnableLimitlessDatabase) {
+		delta.Add("Spec.EnableLimitlessDatabase", a.ko.Spec.EnableLimitlessDatabase, b.ko.Spec.EnableLimitlessDatabase)
+	} else if a.ko.Spec.EnableLimitlessDatabase != nil && b.ko.Spec.EnableLimitlessDatabase != nil {
+		if *a.ko.Spec.EnableLimitlessDatabase != *b.ko.Spec.EnableLimitlessDatabase {
+			delta.Add("Spec.EnableLimitlessDatabase", a.ko.Spec.EnableLimitlessDatabase, b.ko.Spec.EnableLimitlessDatabase)
+		}
+	}
+	if ackcompare.HasNilDifference(a.ko.Spec.EnableLocalWriteForwarding, b.ko.Spec.EnableLocalWriteForwarding) {
+		delta.Add("Spec.EnableLocalWriteForwarding", a.ko.Spec.EnableLocalWriteForwarding, b.ko.Spec.EnableLocalWriteForwarding)
+	} else if a.ko.Spec.EnableLocalWriteForwarding != nil && b.ko.Spec.EnableLocalWriteForwarding != nil {
+		if *a.ko.Spec.EnableLocalWriteForwarding != *b.ko.Spec.EnableLocalWriteForwarding {
+			delta.Add("Spec.EnableLocalWriteForwarding", a.ko.Spec.EnableLocalWriteForwarding, b.ko.Spec.EnableLocalWriteForwarding)
+		}
+	}
 	if ackcompare.HasNilDifference(a.ko.Spec.EnablePerformanceInsights, b.ko.Spec.EnablePerformanceInsights) {
 		delta.Add("Spec.EnablePerformanceInsights", a.ko.Spec.EnablePerformanceInsights, b.ko.Spec.EnablePerformanceInsights)
 	} else if a.ko.Spec.EnablePerformanceInsights != nil && b.ko.Spec.EnablePerformanceInsights != nil {
@@ -358,6 +372,31 @@ func newResourceDelta(
 			delta.Add("Spec.PubliclyAccessible", a.ko.Spec.PubliclyAccessible, b.ko.Spec.PubliclyAccessible)
 		}
 	}
+	if ackcompare.HasNilDifference(a.ko.Spec.RdsCustomClusterConfiguration, b.ko.Spec.RdsCustomClusterConfiguration) {
+		delta.Add("Spec.RdsCustomClusterConfiguration", a.ko.Spec.RdsCustomClusterConfiguration, b.ko.Spec.RdsCustomClusterConfiguration)
+	} else if a.ko.Spec.RdsCustomClusterConfiguration != nil && b.ko.Spec.RdsCustomClusterConfiguration != nil {
+		if ackcompare.HasNilDifference(a.ko.Spec.RdsCustomClusterConfiguration.InterconnectSubnetID, b.ko.Spec.RdsCustomClusterConfiguration.InterconnectSubnetID) {
+			delta.Add("Spec.RdsCustomClusterConfiguration.InterconnectSubnetID", a.ko.Spec.RdsCustomClusterConfiguration.InterconnectSubnetID, b.ko.Spec.RdsCustomClusterConfiguration.InterconnectSubnetID)
+		} else if a.ko.Spec.RdsCustomClusterConfiguration.InterconnectSubnetID != nil && b.ko.Spec.RdsCustomClusterConfiguration.InterconnectSubnetID != nil {
+			if *a.ko.Spec.RdsCustomClusterConfiguration.InterconnectSubnetID != *b.ko.Spec.RdsCustomClusterConfiguration.InterconnectSubnetID {
+				delta.Add("Spec.RdsCustomClusterConfiguration.InterconnectSubnetID", a.ko.Spec.RdsCustomClusterConfiguration.InterconnectSubnetID, b.ko.Spec.RdsCustomClusterConfiguration.InterconnectSubnetID)
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.RdsCustomClusterConfiguration.ReplicaMode, b.ko.Spec.RdsCustomClusterConfiguration.ReplicaMode) {
+			delta.Add("Spec.RdsCustomClusterConfiguration.ReplicaMode", a.ko.Spec.RdsCustomClusterConfiguration.ReplicaMode, b.ko.Spec.RdsCustomClusterConfiguration.ReplicaMode)
+		} else if a.ko.Spec.RdsCustomClusterConfiguration.ReplicaMode != nil && b.ko.Spec.RdsCustomClusterConfiguration.ReplicaMode != nil {
+			if *a.ko.Spec.RdsCustomClusterConfiguration.ReplicaMode != *b.ko.Spec.RdsCustomClusterConfiguration.ReplicaMode {
+				delta.Add("Spec.RdsCustomClusterConfiguration.ReplicaMode", a.ko.Spec.RdsCustomClusterConfiguration.ReplicaMode, b.ko.Spec.RdsCustomClusterConfiguration.ReplicaMode)
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.RdsCustomClusterConfiguration.TransitGatewayMulticastDomainID, b.ko.Spec.RdsCustomClusterConfiguration.TransitGatewayMulticastDomainID) {
+			delta.Add("Spec.RdsCustomClusterConfiguration.TransitGatewayMulticastDomainID", a.ko.Spec.RdsCustomClusterConfiguration.TransitGatewayMulticastDomainID, b.ko.Spec.RdsCustomClusterConfiguration.TransitGatewayMulticastDomainID)
+		} else if a.ko.Spec.RdsCustomClusterConfiguration.TransitGatewayMulticastDomainID != nil && b.ko.Spec.RdsCustomClusterConfiguration.TransitGatewayMulticastDomainID != nil {
+			if *a.ko.Spec.RdsCustomClusterConfiguration.TransitGatewayMulticastDomainID != *b.ko.Spec.RdsCustomClusterConfiguration.TransitGatewayMulticastDomainID {
+				delta.Add("Spec.RdsCustomClusterConfiguration.TransitGatewayMulticastDomainID", a.ko.Spec.RdsCustomClusterConfiguration.TransitGatewayMulticastDomainID, b.ko.Spec.RdsCustomClusterConfiguration.TransitGatewayMulticastDomainID)
+			}
+		}
+	}
 	if ackcompare.HasNilDifference(a.ko.Spec.ReplicationSourceIdentifier, b.ko.Spec.ReplicationSourceIdentifier) {
 		delta.Add("Spec.ReplicationSourceIdentifier", a.ko.Spec.ReplicationSourceIdentifier, b.ko.Spec.ReplicationSourceIdentifier)
 	} else if a.ko.Spec.ReplicationSourceIdentifier != nil && b.ko.Spec.ReplicationSourceIdentifier != nil {
@@ -440,6 +479,13 @@ func newResourceDelta(
 		} else if a.ko.Spec.ServerlessV2ScalingConfiguration.MinCapacity != nil && b.ko.Spec.ServerlessV2ScalingConfiguration.MinCapacity != nil {
 			if *a.ko.Spec.ServerlessV2ScalingConfiguration.MinCapacity != *b.ko.Spec.ServerlessV2ScalingConfiguration.MinCapacity {
 				delta.Add("Spec.ServerlessV2ScalingConfiguration.MinCapacity", a.ko.Spec.ServerlessV2ScalingConfiguration.MinCapacity, b.ko.Spec.ServerlessV2ScalingConfiguration.MinCapacity)
+			}
+		}
+		if ackcompare.HasNilDifference(a.ko.Spec.ServerlessV2ScalingConfiguration.SecondsUntilAutoPause, b.ko.Spec.ServerlessV2ScalingConfiguration.SecondsUntilAutoPause) {
+			delta.Add("Spec.ServerlessV2ScalingConfiguration.SecondsUntilAutoPause", a.ko.Spec.ServerlessV2ScalingConfiguration.SecondsUntilAutoPause, b.ko.Spec.ServerlessV2ScalingConfiguration.SecondsUntilAutoPause)
+		} else if a.ko.Spec.ServerlessV2ScalingConfiguration.SecondsUntilAutoPause != nil && b.ko.Spec.ServerlessV2ScalingConfiguration.SecondsUntilAutoPause != nil {
+			if *a.ko.Spec.ServerlessV2ScalingConfiguration.SecondsUntilAutoPause != *b.ko.Spec.ServerlessV2ScalingConfiguration.SecondsUntilAutoPause {
+				delta.Add("Spec.ServerlessV2ScalingConfiguration.SecondsUntilAutoPause", a.ko.Spec.ServerlessV2ScalingConfiguration.SecondsUntilAutoPause, b.ko.Spec.ServerlessV2ScalingConfiguration.SecondsUntilAutoPause)
 			}
 		}
 	}

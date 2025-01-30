@@ -28,8 +28,10 @@ import (
 	ackerr "github.com/aws-controllers-k8s/runtime/pkg/errors"
 	ackrequeue "github.com/aws-controllers-k8s/runtime/pkg/requeue"
 	ackrtlog "github.com/aws-controllers-k8s/runtime/pkg/runtime/log"
-	"github.com/aws/aws-sdk-go/aws"
-	svcsdk "github.com/aws/aws-sdk-go/service/rds"
+	"github.com/aws/aws-sdk-go-v2/aws"
+	svcsdk "github.com/aws/aws-sdk-go-v2/service/rds"
+	svcsdktypes "github.com/aws/aws-sdk-go-v2/service/rds/types"
+	smithy "github.com/aws/smithy-go"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
@@ -40,8 +42,7 @@ import (
 var (
 	_ = &metav1.Time{}
 	_ = strings.ToLower("")
-	_ = &aws.JSONValue{}
-	_ = &svcsdk.RDS{}
+	_ = &svcsdk.Client{}
 	_ = &svcapitypes.DBSnapshot{}
 	_ = ackv1alpha1.AWSAccountID("")
 	_ = &ackerr.NotFound
@@ -49,6 +50,7 @@ var (
 	_ = &reflect.Value{}
 	_ = fmt.Sprintf("")
 	_ = &ackrequeue.NoRequeue{}
+	_ = &aws.Config{}
 )
 
 // sdkFind returns SDK-specific information about a supplied resource
@@ -73,10 +75,11 @@ func (rm *resourceManager) sdkFind(
 		return nil, err
 	}
 	var resp *svcsdk.DescribeDBSnapshotsOutput
-	resp, err = rm.sdkapi.DescribeDBSnapshotsWithContext(ctx, input)
+	resp, err = rm.sdkapi.DescribeDBSnapshots(ctx, input)
 	rm.metrics.RecordAPICall("READ_MANY", "DescribeDBSnapshots", err)
 	if err != nil {
-		if awsErr, ok := ackerr.AWSError(err); ok && awsErr.Code() == "DBSnapshotNotFound" {
+		var awsErr smithy.APIError
+		if errors.As(err, &awsErr) && awsErr.ErrorCode() == "DBSnapshotNotFound" {
 			return nil, ackerr.NotFound
 		}
 		return nil, err
@@ -89,7 +92,8 @@ func (rm *resourceManager) sdkFind(
 	found := false
 	for _, elem := range resp.DBSnapshots {
 		if elem.AllocatedStorage != nil {
-			ko.Status.AllocatedStorage = elem.AllocatedStorage
+			allocatedStorageCopy := int64(*elem.AllocatedStorage)
+			ko.Status.AllocatedStorage = &allocatedStorageCopy
 		} else {
 			ko.Status.AllocatedStorage = nil
 		}
@@ -115,10 +119,20 @@ func (rm *resourceManager) sdkFind(
 		} else {
 			ko.Spec.DBSnapshotIdentifier = nil
 		}
+		if elem.DBSystemId != nil {
+			ko.Status.DBSystemID = elem.DBSystemId
+		} else {
+			ko.Status.DBSystemID = nil
+		}
 		if elem.DbiResourceId != nil {
 			ko.Status.DBIResourceID = elem.DbiResourceId
 		} else {
 			ko.Status.DBIResourceID = nil
+		}
+		if elem.DedicatedLogVolume != nil {
+			ko.Status.DedicatedLogVolume = elem.DedicatedLogVolume
+		} else {
+			ko.Status.DedicatedLogVolume = nil
 		}
 		if elem.Encrypted != nil {
 			ko.Status.Encrypted = elem.Encrypted
@@ -141,7 +155,8 @@ func (rm *resourceManager) sdkFind(
 			ko.Status.InstanceCreateTime = nil
 		}
 		if elem.Iops != nil {
-			ko.Status.IOPS = elem.Iops
+			iopsCopy := int64(*elem.Iops)
+			ko.Status.IOPS = &iopsCopy
 		} else {
 			ko.Status.IOPS = nil
 		}
@@ -160,34 +175,41 @@ func (rm *resourceManager) sdkFind(
 		} else {
 			ko.Status.MasterUsername = nil
 		}
+		if elem.MultiTenant != nil {
+			ko.Status.MultiTenant = elem.MultiTenant
+		} else {
+			ko.Status.MultiTenant = nil
+		}
 		if elem.OriginalSnapshotCreateTime != nil {
 			ko.Status.OriginalSnapshotCreateTime = &metav1.Time{*elem.OriginalSnapshotCreateTime}
 		} else {
 			ko.Status.OriginalSnapshotCreateTime = nil
 		}
 		if elem.PercentProgress != nil {
-			ko.Status.PercentProgress = elem.PercentProgress
+			percentProgressCopy := int64(*elem.PercentProgress)
+			ko.Status.PercentProgress = &percentProgressCopy
 		} else {
 			ko.Status.PercentProgress = nil
 		}
 		if elem.Port != nil {
-			ko.Status.Port = elem.Port
+			portCopy := int64(*elem.Port)
+			ko.Status.Port = &portCopy
 		} else {
 			ko.Status.Port = nil
 		}
 		if elem.ProcessorFeatures != nil {
-			f17 := []*svcapitypes.ProcessorFeature{}
-			for _, f17iter := range elem.ProcessorFeatures {
-				f17elem := &svcapitypes.ProcessorFeature{}
-				if f17iter.Name != nil {
-					f17elem.Name = f17iter.Name
+			f20 := []*svcapitypes.ProcessorFeature{}
+			for _, f20iter := range elem.ProcessorFeatures {
+				f20elem := &svcapitypes.ProcessorFeature{}
+				if f20iter.Name != nil {
+					f20elem.Name = f20iter.Name
 				}
-				if f17iter.Value != nil {
-					f17elem.Value = f17iter.Value
+				if f20iter.Value != nil {
+					f20elem.Value = f20iter.Value
 				}
-				f17 = append(f17, f17elem)
+				f20 = append(f20, f20elem)
 			}
-			ko.Status.ProcessorFeatures = f17
+			ko.Status.ProcessorFeatures = f20
 		} else {
 			ko.Status.ProcessorFeatures = nil
 		}
@@ -227,7 +249,8 @@ func (rm *resourceManager) sdkFind(
 			ko.Status.Status = nil
 		}
 		if elem.StorageThroughput != nil {
-			ko.Status.StorageThroughput = elem.StorageThroughput
+			storageThroughputCopy := int64(*elem.StorageThroughput)
+			ko.Status.StorageThroughput = &storageThroughputCopy
 		} else {
 			ko.Status.StorageThroughput = nil
 		}
@@ -237,18 +260,18 @@ func (rm *resourceManager) sdkFind(
 			ko.Status.StorageType = nil
 		}
 		if elem.TagList != nil {
-			f27 := []*svcapitypes.Tag{}
-			for _, f27iter := range elem.TagList {
-				f27elem := &svcapitypes.Tag{}
-				if f27iter.Key != nil {
-					f27elem.Key = f27iter.Key
+			f30 := []*svcapitypes.Tag{}
+			for _, f30iter := range elem.TagList {
+				f30elem := &svcapitypes.Tag{}
+				if f30iter.Key != nil {
+					f30elem.Key = f30iter.Key
 				}
-				if f27iter.Value != nil {
-					f27elem.Value = f27iter.Value
+				if f30iter.Value != nil {
+					f30elem.Value = f30iter.Value
 				}
-				f27 = append(f27, f27elem)
+				f30 = append(f30, f30elem)
 			}
-			ko.Status.TagList = f27
+			ko.Status.TagList = f30
 		} else {
 			ko.Status.TagList = nil
 		}
@@ -309,16 +332,16 @@ func (rm *resourceManager) newListRequestPayload(
 	res := &svcsdk.DescribeDBSnapshotsInput{}
 
 	if r.ko.Spec.DBInstanceIdentifier != nil {
-		res.SetDBInstanceIdentifier(*r.ko.Spec.DBInstanceIdentifier)
+		res.DBInstanceIdentifier = r.ko.Spec.DBInstanceIdentifier
 	}
 	if r.ko.Spec.DBSnapshotIdentifier != nil {
-		res.SetDBSnapshotIdentifier(*r.ko.Spec.DBSnapshotIdentifier)
+		res.DBSnapshotIdentifier = r.ko.Spec.DBSnapshotIdentifier
 	}
 	if r.ko.Status.DBIResourceID != nil {
-		res.SetDbiResourceId(*r.ko.Status.DBIResourceID)
+		res.DbiResourceId = r.ko.Status.DBIResourceID
 	}
 	if r.ko.Status.SnapshotType != nil {
-		res.SetSnapshotType(*r.ko.Status.SnapshotType)
+		res.SnapshotType = r.ko.Status.SnapshotType
 	}
 
 	return res, nil
@@ -343,7 +366,7 @@ func (rm *resourceManager) sdkCreate(
 
 	var resp *svcsdk.CreateDBSnapshotOutput
 	_ = resp
-	resp, err = rm.sdkapi.CreateDBSnapshotWithContext(ctx, input)
+	resp, err = rm.sdkapi.CreateDBSnapshot(ctx, input)
 	rm.metrics.RecordAPICall("CREATE", "CreateDBSnapshot", err)
 	if err != nil {
 		return nil, err
@@ -353,7 +376,8 @@ func (rm *resourceManager) sdkCreate(
 	ko := desired.ko.DeepCopy()
 
 	if resp.DBSnapshot.AllocatedStorage != nil {
-		ko.Status.AllocatedStorage = resp.DBSnapshot.AllocatedStorage
+		allocatedStorageCopy := int64(*resp.DBSnapshot.AllocatedStorage)
+		ko.Status.AllocatedStorage = &allocatedStorageCopy
 	} else {
 		ko.Status.AllocatedStorage = nil
 	}
@@ -379,10 +403,20 @@ func (rm *resourceManager) sdkCreate(
 	} else {
 		ko.Spec.DBSnapshotIdentifier = nil
 	}
+	if resp.DBSnapshot.DBSystemId != nil {
+		ko.Status.DBSystemID = resp.DBSnapshot.DBSystemId
+	} else {
+		ko.Status.DBSystemID = nil
+	}
 	if resp.DBSnapshot.DbiResourceId != nil {
 		ko.Status.DBIResourceID = resp.DBSnapshot.DbiResourceId
 	} else {
 		ko.Status.DBIResourceID = nil
+	}
+	if resp.DBSnapshot.DedicatedLogVolume != nil {
+		ko.Status.DedicatedLogVolume = resp.DBSnapshot.DedicatedLogVolume
+	} else {
+		ko.Status.DedicatedLogVolume = nil
 	}
 	if resp.DBSnapshot.Encrypted != nil {
 		ko.Status.Encrypted = resp.DBSnapshot.Encrypted
@@ -405,7 +439,8 @@ func (rm *resourceManager) sdkCreate(
 		ko.Status.InstanceCreateTime = nil
 	}
 	if resp.DBSnapshot.Iops != nil {
-		ko.Status.IOPS = resp.DBSnapshot.Iops
+		iopsCopy := int64(*resp.DBSnapshot.Iops)
+		ko.Status.IOPS = &iopsCopy
 	} else {
 		ko.Status.IOPS = nil
 	}
@@ -424,34 +459,41 @@ func (rm *resourceManager) sdkCreate(
 	} else {
 		ko.Status.MasterUsername = nil
 	}
+	if resp.DBSnapshot.MultiTenant != nil {
+		ko.Status.MultiTenant = resp.DBSnapshot.MultiTenant
+	} else {
+		ko.Status.MultiTenant = nil
+	}
 	if resp.DBSnapshot.OriginalSnapshotCreateTime != nil {
 		ko.Status.OriginalSnapshotCreateTime = &metav1.Time{*resp.DBSnapshot.OriginalSnapshotCreateTime}
 	} else {
 		ko.Status.OriginalSnapshotCreateTime = nil
 	}
 	if resp.DBSnapshot.PercentProgress != nil {
-		ko.Status.PercentProgress = resp.DBSnapshot.PercentProgress
+		percentProgressCopy := int64(*resp.DBSnapshot.PercentProgress)
+		ko.Status.PercentProgress = &percentProgressCopy
 	} else {
 		ko.Status.PercentProgress = nil
 	}
 	if resp.DBSnapshot.Port != nil {
-		ko.Status.Port = resp.DBSnapshot.Port
+		portCopy := int64(*resp.DBSnapshot.Port)
+		ko.Status.Port = &portCopy
 	} else {
 		ko.Status.Port = nil
 	}
 	if resp.DBSnapshot.ProcessorFeatures != nil {
-		f17 := []*svcapitypes.ProcessorFeature{}
-		for _, f17iter := range resp.DBSnapshot.ProcessorFeatures {
-			f17elem := &svcapitypes.ProcessorFeature{}
-			if f17iter.Name != nil {
-				f17elem.Name = f17iter.Name
+		f20 := []*svcapitypes.ProcessorFeature{}
+		for _, f20iter := range resp.DBSnapshot.ProcessorFeatures {
+			f20elem := &svcapitypes.ProcessorFeature{}
+			if f20iter.Name != nil {
+				f20elem.Name = f20iter.Name
 			}
-			if f17iter.Value != nil {
-				f17elem.Value = f17iter.Value
+			if f20iter.Value != nil {
+				f20elem.Value = f20iter.Value
 			}
-			f17 = append(f17, f17elem)
+			f20 = append(f20, f20elem)
 		}
-		ko.Status.ProcessorFeatures = f17
+		ko.Status.ProcessorFeatures = f20
 	} else {
 		ko.Status.ProcessorFeatures = nil
 	}
@@ -491,7 +533,8 @@ func (rm *resourceManager) sdkCreate(
 		ko.Status.Status = nil
 	}
 	if resp.DBSnapshot.StorageThroughput != nil {
-		ko.Status.StorageThroughput = resp.DBSnapshot.StorageThroughput
+		storageThroughputCopy := int64(*resp.DBSnapshot.StorageThroughput)
+		ko.Status.StorageThroughput = &storageThroughputCopy
 	} else {
 		ko.Status.StorageThroughput = nil
 	}
@@ -501,18 +544,18 @@ func (rm *resourceManager) sdkCreate(
 		ko.Status.StorageType = nil
 	}
 	if resp.DBSnapshot.TagList != nil {
-		f27 := []*svcapitypes.Tag{}
-		for _, f27iter := range resp.DBSnapshot.TagList {
-			f27elem := &svcapitypes.Tag{}
-			if f27iter.Key != nil {
-				f27elem.Key = f27iter.Key
+		f30 := []*svcapitypes.Tag{}
+		for _, f30iter := range resp.DBSnapshot.TagList {
+			f30elem := &svcapitypes.Tag{}
+			if f30iter.Key != nil {
+				f30elem.Key = f30iter.Key
 			}
-			if f27iter.Value != nil {
-				f27elem.Value = f27iter.Value
+			if f30iter.Value != nil {
+				f30elem.Value = f30iter.Value
 			}
-			f27 = append(f27, f27elem)
+			f30 = append(f30, f30elem)
 		}
-		ko.Status.TagList = f27
+		ko.Status.TagList = f30
 	} else {
 		ko.Status.TagList = nil
 	}
@@ -555,24 +598,24 @@ func (rm *resourceManager) newCreateRequestPayload(
 	res := &svcsdk.CreateDBSnapshotInput{}
 
 	if r.ko.Spec.DBInstanceIdentifier != nil {
-		res.SetDBInstanceIdentifier(*r.ko.Spec.DBInstanceIdentifier)
+		res.DBInstanceIdentifier = r.ko.Spec.DBInstanceIdentifier
 	}
 	if r.ko.Spec.DBSnapshotIdentifier != nil {
-		res.SetDBSnapshotIdentifier(*r.ko.Spec.DBSnapshotIdentifier)
+		res.DBSnapshotIdentifier = r.ko.Spec.DBSnapshotIdentifier
 	}
 	if r.ko.Spec.Tags != nil {
-		f2 := []*svcsdk.Tag{}
+		f2 := []svcsdktypes.Tag{}
 		for _, f2iter := range r.ko.Spec.Tags {
-			f2elem := &svcsdk.Tag{}
+			f2elem := &svcsdktypes.Tag{}
 			if f2iter.Key != nil {
-				f2elem.SetKey(*f2iter.Key)
+				f2elem.Key = f2iter.Key
 			}
 			if f2iter.Value != nil {
-				f2elem.SetValue(*f2iter.Value)
+				f2elem.Value = f2iter.Value
 			}
-			f2 = append(f2, f2elem)
+			f2 = append(f2, *f2elem)
 		}
-		res.SetTags(f2)
+		res.Tags = f2
 	}
 
 	return res, nil
@@ -609,7 +652,7 @@ func (rm *resourceManager) sdkUpdate(
 
 	var resp *svcsdk.ModifyDBSnapshotOutput
 	_ = resp
-	resp, err = rm.sdkapi.ModifyDBSnapshotWithContext(ctx, input)
+	resp, err = rm.sdkapi.ModifyDBSnapshot(ctx, input)
 	rm.metrics.RecordAPICall("UPDATE", "ModifyDBSnapshot", err)
 	if err != nil {
 		return nil, err
@@ -619,7 +662,8 @@ func (rm *resourceManager) sdkUpdate(
 	ko := desired.ko.DeepCopy()
 
 	if resp.DBSnapshot.AllocatedStorage != nil {
-		ko.Status.AllocatedStorage = resp.DBSnapshot.AllocatedStorage
+		allocatedStorageCopy := int64(*resp.DBSnapshot.AllocatedStorage)
+		ko.Status.AllocatedStorage = &allocatedStorageCopy
 	} else {
 		ko.Status.AllocatedStorage = nil
 	}
@@ -645,10 +689,20 @@ func (rm *resourceManager) sdkUpdate(
 	} else {
 		ko.Spec.DBSnapshotIdentifier = nil
 	}
+	if resp.DBSnapshot.DBSystemId != nil {
+		ko.Status.DBSystemID = resp.DBSnapshot.DBSystemId
+	} else {
+		ko.Status.DBSystemID = nil
+	}
 	if resp.DBSnapshot.DbiResourceId != nil {
 		ko.Status.DBIResourceID = resp.DBSnapshot.DbiResourceId
 	} else {
 		ko.Status.DBIResourceID = nil
+	}
+	if resp.DBSnapshot.DedicatedLogVolume != nil {
+		ko.Status.DedicatedLogVolume = resp.DBSnapshot.DedicatedLogVolume
+	} else {
+		ko.Status.DedicatedLogVolume = nil
 	}
 	if resp.DBSnapshot.Encrypted != nil {
 		ko.Status.Encrypted = resp.DBSnapshot.Encrypted
@@ -671,7 +725,8 @@ func (rm *resourceManager) sdkUpdate(
 		ko.Status.InstanceCreateTime = nil
 	}
 	if resp.DBSnapshot.Iops != nil {
-		ko.Status.IOPS = resp.DBSnapshot.Iops
+		iopsCopy := int64(*resp.DBSnapshot.Iops)
+		ko.Status.IOPS = &iopsCopy
 	} else {
 		ko.Status.IOPS = nil
 	}
@@ -690,34 +745,41 @@ func (rm *resourceManager) sdkUpdate(
 	} else {
 		ko.Status.MasterUsername = nil
 	}
+	if resp.DBSnapshot.MultiTenant != nil {
+		ko.Status.MultiTenant = resp.DBSnapshot.MultiTenant
+	} else {
+		ko.Status.MultiTenant = nil
+	}
 	if resp.DBSnapshot.OriginalSnapshotCreateTime != nil {
 		ko.Status.OriginalSnapshotCreateTime = &metav1.Time{*resp.DBSnapshot.OriginalSnapshotCreateTime}
 	} else {
 		ko.Status.OriginalSnapshotCreateTime = nil
 	}
 	if resp.DBSnapshot.PercentProgress != nil {
-		ko.Status.PercentProgress = resp.DBSnapshot.PercentProgress
+		percentProgressCopy := int64(*resp.DBSnapshot.PercentProgress)
+		ko.Status.PercentProgress = &percentProgressCopy
 	} else {
 		ko.Status.PercentProgress = nil
 	}
 	if resp.DBSnapshot.Port != nil {
-		ko.Status.Port = resp.DBSnapshot.Port
+		portCopy := int64(*resp.DBSnapshot.Port)
+		ko.Status.Port = &portCopy
 	} else {
 		ko.Status.Port = nil
 	}
 	if resp.DBSnapshot.ProcessorFeatures != nil {
-		f17 := []*svcapitypes.ProcessorFeature{}
-		for _, f17iter := range resp.DBSnapshot.ProcessorFeatures {
-			f17elem := &svcapitypes.ProcessorFeature{}
-			if f17iter.Name != nil {
-				f17elem.Name = f17iter.Name
+		f20 := []*svcapitypes.ProcessorFeature{}
+		for _, f20iter := range resp.DBSnapshot.ProcessorFeatures {
+			f20elem := &svcapitypes.ProcessorFeature{}
+			if f20iter.Name != nil {
+				f20elem.Name = f20iter.Name
 			}
-			if f17iter.Value != nil {
-				f17elem.Value = f17iter.Value
+			if f20iter.Value != nil {
+				f20elem.Value = f20iter.Value
 			}
-			f17 = append(f17, f17elem)
+			f20 = append(f20, f20elem)
 		}
-		ko.Status.ProcessorFeatures = f17
+		ko.Status.ProcessorFeatures = f20
 	} else {
 		ko.Status.ProcessorFeatures = nil
 	}
@@ -757,7 +819,8 @@ func (rm *resourceManager) sdkUpdate(
 		ko.Status.Status = nil
 	}
 	if resp.DBSnapshot.StorageThroughput != nil {
-		ko.Status.StorageThroughput = resp.DBSnapshot.StorageThroughput
+		storageThroughputCopy := int64(*resp.DBSnapshot.StorageThroughput)
+		ko.Status.StorageThroughput = &storageThroughputCopy
 	} else {
 		ko.Status.StorageThroughput = nil
 	}
@@ -767,18 +830,18 @@ func (rm *resourceManager) sdkUpdate(
 		ko.Status.StorageType = nil
 	}
 	if resp.DBSnapshot.TagList != nil {
-		f27 := []*svcapitypes.Tag{}
-		for _, f27iter := range resp.DBSnapshot.TagList {
-			f27elem := &svcapitypes.Tag{}
-			if f27iter.Key != nil {
-				f27elem.Key = f27iter.Key
+		f30 := []*svcapitypes.Tag{}
+		for _, f30iter := range resp.DBSnapshot.TagList {
+			f30elem := &svcapitypes.Tag{}
+			if f30iter.Key != nil {
+				f30elem.Key = f30iter.Key
 			}
-			if f27iter.Value != nil {
-				f27elem.Value = f27iter.Value
+			if f30iter.Value != nil {
+				f30elem.Value = f30iter.Value
 			}
-			f27 = append(f27, f27elem)
+			f30 = append(f30, f30elem)
 		}
-		ko.Status.TagList = f27
+		ko.Status.TagList = f30
 	} else {
 		ko.Status.TagList = nil
 	}
@@ -812,7 +875,7 @@ func (rm *resourceManager) newUpdateRequestPayload(
 	res := &svcsdk.ModifyDBSnapshotInput{}
 
 	if r.ko.Spec.DBSnapshotIdentifier != nil {
-		res.SetDBSnapshotIdentifier(*r.ko.Spec.DBSnapshotIdentifier)
+		res.DBSnapshotIdentifier = r.ko.Spec.DBSnapshotIdentifier
 	}
 
 	return res, nil
@@ -834,7 +897,7 @@ func (rm *resourceManager) sdkDelete(
 	}
 	var resp *svcsdk.DeleteDBSnapshotOutput
 	_ = resp
-	resp, err = rm.sdkapi.DeleteDBSnapshotWithContext(ctx, input)
+	resp, err = rm.sdkapi.DeleteDBSnapshot(ctx, input)
 	rm.metrics.RecordAPICall("DELETE", "DeleteDBSnapshot", err)
 	return nil, err
 }
@@ -847,7 +910,7 @@ func (rm *resourceManager) newDeleteRequestPayload(
 	res := &svcsdk.DeleteDBSnapshotInput{}
 
 	if r.ko.Spec.DBSnapshotIdentifier != nil {
-		res.SetDBSnapshotIdentifier(*r.ko.Spec.DBSnapshotIdentifier)
+		res.DBSnapshotIdentifier = r.ko.Spec.DBSnapshotIdentifier
 	}
 
 	return res, nil

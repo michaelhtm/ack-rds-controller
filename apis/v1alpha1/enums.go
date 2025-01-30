@@ -18,25 +18,25 @@ package v1alpha1
 type ActivityStreamMode string
 
 const (
-	ActivityStreamMode_sync  ActivityStreamMode = "sync"
 	ActivityStreamMode_async ActivityStreamMode = "async"
+	ActivityStreamMode_sync  ActivityStreamMode = "sync"
 )
 
 type ActivityStreamPolicyStatus string
 
 const (
 	ActivityStreamPolicyStatus_locked           ActivityStreamPolicyStatus = "locked"
+	ActivityStreamPolicyStatus_locking_policy   ActivityStreamPolicyStatus = "locking_policy"
 	ActivityStreamPolicyStatus_unlocked         ActivityStreamPolicyStatus = "unlocked"
-	ActivityStreamPolicyStatus_locking_policy   ActivityStreamPolicyStatus = "locking-policy"
-	ActivityStreamPolicyStatus_unlocking_policy ActivityStreamPolicyStatus = "unlocking-policy"
+	ActivityStreamPolicyStatus_unlocking_policy ActivityStreamPolicyStatus = "unlocking_policy"
 )
 
 type ActivityStreamStatus string
 
 const (
-	ActivityStreamStatus_stopped  ActivityStreamStatus = "stopped"
-	ActivityStreamStatus_starting ActivityStreamStatus = "starting"
 	ActivityStreamStatus_started  ActivityStreamStatus = "started"
+	ActivityStreamStatus_starting ActivityStreamStatus = "starting"
+	ActivityStreamStatus_stopped  ActivityStreamStatus = "stopped"
 	ActivityStreamStatus_stopping ActivityStreamStatus = "stopping"
 )
 
@@ -44,14 +44,14 @@ type ApplyMethod string
 
 const (
 	ApplyMethod_immediate      ApplyMethod = "immediate"
-	ApplyMethod_pending_reboot ApplyMethod = "pending-reboot"
+	ApplyMethod_pending_reboot ApplyMethod = "pending_reboot"
 )
 
 type AuditPolicyState string
 
 const (
-	AuditPolicyState_locked   AuditPolicyState = "locked"
-	AuditPolicyState_unlocked AuditPolicyState = "unlocked"
+	AuditPolicyState_LOCKED_POLICY   AuditPolicyState = "LOCKED_POLICY"
+	AuditPolicyState_UNLOCKED_POLICY AuditPolicyState = "UNLOCKED_POLICY"
 )
 
 type AuthScheme string
@@ -63,17 +63,24 @@ const (
 type AutomationMode string
 
 const (
-	AutomationMode_full       AutomationMode = "full"
-	AutomationMode_all_paused AutomationMode = "all-paused"
+	AutomationMode_ALL_PAUSED AutomationMode = "ALL_PAUSED"
+	AutomationMode_FULL       AutomationMode = "FULL"
 )
 
 type ClientPasswordAuthType string
 
 const (
 	ClientPasswordAuthType_MYSQL_NATIVE_PASSWORD     ClientPasswordAuthType = "MYSQL_NATIVE_PASSWORD"
-	ClientPasswordAuthType_POSTGRES_SCRAM_SHA_256    ClientPasswordAuthType = "POSTGRES_SCRAM_SHA_256"
 	ClientPasswordAuthType_POSTGRES_MD5              ClientPasswordAuthType = "POSTGRES_MD5"
+	ClientPasswordAuthType_POSTGRES_SCRAM_SHA_256    ClientPasswordAuthType = "POSTGRES_SCRAM_SHA_256"
 	ClientPasswordAuthType_SQL_SERVER_AUTHENTICATION ClientPasswordAuthType = "SQL_SERVER_AUTHENTICATION"
+)
+
+type ClusterScalabilityType string
+
+const (
+	ClusterScalabilityType_LIMITLESS ClusterScalabilityType = "LIMITLESS"
+	ClusterScalabilityType_STANDARD  ClusterScalabilityType = "STANDARD"
 )
 
 type CustomEngineVersionStatus string
@@ -81,39 +88,46 @@ type CustomEngineVersionStatus string
 const (
 	CustomEngineVersionStatus_available               CustomEngineVersionStatus = "available"
 	CustomEngineVersionStatus_inactive                CustomEngineVersionStatus = "inactive"
-	CustomEngineVersionStatus_inactive_except_restore CustomEngineVersionStatus = "inactive-except-restore"
+	CustomEngineVersionStatus_inactive_except_restore CustomEngineVersionStatus = "inactive_except_restore"
 )
 
 type DBProxyEndpointStatus string
 
 const (
-	DBProxyEndpointStatus_available                    DBProxyEndpointStatus = "available"
-	DBProxyEndpointStatus_modifying                    DBProxyEndpointStatus = "modifying"
-	DBProxyEndpointStatus_incompatible_network         DBProxyEndpointStatus = "incompatible-network"
-	DBProxyEndpointStatus_insufficient_resource_limits DBProxyEndpointStatus = "insufficient-resource-limits"
-	DBProxyEndpointStatus_creating                     DBProxyEndpointStatus = "creating"
-	DBProxyEndpointStatus_deleting                     DBProxyEndpointStatus = "deleting"
+	DBProxyEndpointStatus_AVAILABLE                    DBProxyEndpointStatus = "AVAILABLE"
+	DBProxyEndpointStatus_CREATING                     DBProxyEndpointStatus = "CREATING"
+	DBProxyEndpointStatus_DELETING                     DBProxyEndpointStatus = "DELETING"
+	DBProxyEndpointStatus_INCOMPATIBLE_NETWORK         DBProxyEndpointStatus = "INCOMPATIBLE_NETWORK"
+	DBProxyEndpointStatus_INSUFFICIENT_RESOURCE_LIMITS DBProxyEndpointStatus = "INSUFFICIENT_RESOURCE_LIMITS"
+	DBProxyEndpointStatus_MODIFYING                    DBProxyEndpointStatus = "MODIFYING"
 )
 
 type DBProxyEndpointTargetRole string
 
 const (
-	DBProxyEndpointTargetRole_READ_WRITE DBProxyEndpointTargetRole = "READ_WRITE"
 	DBProxyEndpointTargetRole_READ_ONLY  DBProxyEndpointTargetRole = "READ_ONLY"
+	DBProxyEndpointTargetRole_READ_WRITE DBProxyEndpointTargetRole = "READ_WRITE"
 )
 
 type DBProxyStatus_SDK string
 
 const (
-	DBProxyStatus_SDK_available                    DBProxyStatus_SDK = "available"
-	DBProxyStatus_SDK_modifying                    DBProxyStatus_SDK = "modifying"
-	DBProxyStatus_SDK_incompatible_network         DBProxyStatus_SDK = "incompatible-network"
-	DBProxyStatus_SDK_insufficient_resource_limits DBProxyStatus_SDK = "insufficient-resource-limits"
-	DBProxyStatus_SDK_creating                     DBProxyStatus_SDK = "creating"
-	DBProxyStatus_SDK_deleting                     DBProxyStatus_SDK = "deleting"
-	DBProxyStatus_SDK_suspended                    DBProxyStatus_SDK = "suspended"
-	DBProxyStatus_SDK_suspending                   DBProxyStatus_SDK = "suspending"
-	DBProxyStatus_SDK_reactivating                 DBProxyStatus_SDK = "reactivating"
+	DBProxyStatus_SDK_AVAILABLE                    DBProxyStatus_SDK = "AVAILABLE"
+	DBProxyStatus_SDK_CREATING                     DBProxyStatus_SDK = "CREATING"
+	DBProxyStatus_SDK_DELETING                     DBProxyStatus_SDK = "DELETING"
+	DBProxyStatus_SDK_INCOMPATIBLE_NETWORK         DBProxyStatus_SDK = "INCOMPATIBLE_NETWORK"
+	DBProxyStatus_SDK_INSUFFICIENT_RESOURCE_LIMITS DBProxyStatus_SDK = "INSUFFICIENT_RESOURCE_LIMITS"
+	DBProxyStatus_SDK_MODIFYING                    DBProxyStatus_SDK = "MODIFYING"
+	DBProxyStatus_SDK_REACTIVATING                 DBProxyStatus_SDK = "REACTIVATING"
+	DBProxyStatus_SDK_SUSPENDED                    DBProxyStatus_SDK = "SUSPENDED"
+	DBProxyStatus_SDK_SUSPENDING                   DBProxyStatus_SDK = "SUSPENDING"
+)
+
+type DatabaseInsightsMode string
+
+const (
+	DatabaseInsightsMode_ADVANCED DatabaseInsightsMode = "ADVANCED"
+	DatabaseInsightsMode_STANDARD DatabaseInsightsMode = "STANDARD"
 )
 
 type EngineFamily string
@@ -127,71 +141,113 @@ const (
 type ExportSourceType string
 
 const (
-	ExportSourceType_SNAPSHOT ExportSourceType = "SNAPSHOT"
 	ExportSourceType_CLUSTER  ExportSourceType = "CLUSTER"
+	ExportSourceType_SNAPSHOT ExportSourceType = "SNAPSHOT"
 )
 
 type FailoverStatus string
 
 const (
-	FailoverStatus_pending      FailoverStatus = "pending"
-	FailoverStatus_failing_over FailoverStatus = "failing-over"
-	FailoverStatus_cancelling   FailoverStatus = "cancelling"
+	FailoverStatus_CANCELLING   FailoverStatus = "CANCELLING"
+	FailoverStatus_FAILING_OVER FailoverStatus = "FAILING_OVER"
+	FailoverStatus_PENDING      FailoverStatus = "PENDING"
+)
+
+type GlobalClusterMemberSynchronizationStatus string
+
+const (
+	GlobalClusterMemberSynchronizationStatus_CONNECTED      GlobalClusterMemberSynchronizationStatus = "CONNECTED"
+	GlobalClusterMemberSynchronizationStatus_PENDING_RESYNC GlobalClusterMemberSynchronizationStatus = "PENDING_RESYNC"
 )
 
 type IAMAuthMode string
 
 const (
 	IAMAuthMode_DISABLED IAMAuthMode = "DISABLED"
-	IAMAuthMode_REQUIRED IAMAuthMode = "REQUIRED"
 	IAMAuthMode_ENABLED  IAMAuthMode = "ENABLED"
+	IAMAuthMode_REQUIRED IAMAuthMode = "REQUIRED"
+)
+
+type IntegrationStatus string
+
+const (
+	IntegrationStatus_ACTIVE          IntegrationStatus = "ACTIVE"
+	IntegrationStatus_CREATING        IntegrationStatus = "CREATING"
+	IntegrationStatus_DELETING        IntegrationStatus = "DELETING"
+	IntegrationStatus_FAILED          IntegrationStatus = "FAILED"
+	IntegrationStatus_MODIFYING       IntegrationStatus = "MODIFYING"
+	IntegrationStatus_NEEDS_ATTENTION IntegrationStatus = "NEEDS_ATTENTION"
+	IntegrationStatus_SYNCING         IntegrationStatus = "SYNCING"
+)
+
+type LimitlessDatabaseStatus string
+
+const (
+	LimitlessDatabaseStatus_ACTIVE                 LimitlessDatabaseStatus = "ACTIVE"
+	LimitlessDatabaseStatus_DISABLED               LimitlessDatabaseStatus = "DISABLED"
+	LimitlessDatabaseStatus_DISABLING              LimitlessDatabaseStatus = "DISABLING"
+	LimitlessDatabaseStatus_ENABLED                LimitlessDatabaseStatus = "ENABLED"
+	LimitlessDatabaseStatus_ENABLING               LimitlessDatabaseStatus = "ENABLING"
+	LimitlessDatabaseStatus_ERROR                  LimitlessDatabaseStatus = "ERROR"
+	LimitlessDatabaseStatus_MODIFYING_MAX_CAPACITY LimitlessDatabaseStatus = "MODIFYING_MAX_CAPACITY"
+	LimitlessDatabaseStatus_NOT_IN_USE             LimitlessDatabaseStatus = "NOT_IN_USE"
+)
+
+type LocalWriteForwardingStatus string
+
+const (
+	LocalWriteForwardingStatus_DISABLED  LocalWriteForwardingStatus = "DISABLED"
+	LocalWriteForwardingStatus_DISABLING LocalWriteForwardingStatus = "DISABLING"
+	LocalWriteForwardingStatus_ENABLED   LocalWriteForwardingStatus = "ENABLED"
+	LocalWriteForwardingStatus_ENABLING  LocalWriteForwardingStatus = "ENABLING"
+	LocalWriteForwardingStatus_REQUESTED LocalWriteForwardingStatus = "REQUESTED"
 )
 
 type ReplicaMode string
 
 const (
-	ReplicaMode_open_read_only ReplicaMode = "open-read-only"
-	ReplicaMode_mounted        ReplicaMode = "mounted"
+	ReplicaMode_MOUNTED        ReplicaMode = "MOUNTED"
+	ReplicaMode_OPEN_READ_ONLY ReplicaMode = "OPEN_READ_ONLY"
 )
 
 type SourceType string
 
 const (
-	SourceType_db_instance           SourceType = "db-instance"
-	SourceType_db_parameter_group    SourceType = "db-parameter-group"
-	SourceType_db_security_group     SourceType = "db-security-group"
-	SourceType_db_snapshot           SourceType = "db-snapshot"
-	SourceType_db_cluster            SourceType = "db-cluster"
-	SourceType_db_cluster_snapshot   SourceType = "db-cluster-snapshot"
-	SourceType_custom_engine_version SourceType = "custom-engine-version"
-	SourceType_db_proxy              SourceType = "db-proxy"
-	SourceType_blue_green_deployment SourceType = "blue-green-deployment"
+	SourceType_blue_green_deployment SourceType = "blue_green_deployment"
+	SourceType_custom_engine_version SourceType = "custom_engine_version"
+	SourceType_db_cluster            SourceType = "db_cluster"
+	SourceType_db_cluster_snapshot   SourceType = "db_cluster_snapshot"
+	SourceType_db_instance           SourceType = "db_instance"
+	SourceType_db_parameter_group    SourceType = "db_parameter_group"
+	SourceType_db_proxy              SourceType = "db_proxy"
+	SourceType_db_security_group     SourceType = "db_security_group"
+	SourceType_db_snapshot           SourceType = "db_snapshot"
 )
 
 type TargetHealthReason string
 
 const (
-	TargetHealthReason_UNREACHABLE               TargetHealthReason = "UNREACHABLE"
-	TargetHealthReason_CONNECTION_FAILED         TargetHealthReason = "CONNECTION_FAILED"
 	TargetHealthReason_AUTH_FAILURE              TargetHealthReason = "AUTH_FAILURE"
-	TargetHealthReason_PENDING_PROXY_CAPACITY    TargetHealthReason = "PENDING_PROXY_CAPACITY"
+	TargetHealthReason_CONNECTION_FAILED         TargetHealthReason = "CONNECTION_FAILED"
 	TargetHealthReason_INVALID_REPLICATION_STATE TargetHealthReason = "INVALID_REPLICATION_STATE"
+	TargetHealthReason_PENDING_PROXY_CAPACITY    TargetHealthReason = "PENDING_PROXY_CAPACITY"
+	TargetHealthReason_UNREACHABLE               TargetHealthReason = "UNREACHABLE"
 )
 
 type TargetRole string
 
 const (
-	TargetRole_READ_WRITE TargetRole = "READ_WRITE"
 	TargetRole_READ_ONLY  TargetRole = "READ_ONLY"
+	TargetRole_READ_WRITE TargetRole = "READ_WRITE"
 	TargetRole_UNKNOWN    TargetRole = "UNKNOWN"
 )
 
 type TargetState string
 
 const (
-	TargetState_REGISTERING TargetState = "REGISTERING"
-	TargetState_AVAILABLE   TargetState = "AVAILABLE"
-	TargetState_UNAVAILABLE TargetState = "UNAVAILABLE"
+	TargetState_available   TargetState = "available"
+	TargetState_registering TargetState = "registering"
+	TargetState_unavailable TargetState = "unavailable"
 )
 
 type TargetType string
@@ -205,9 +261,9 @@ const (
 type WriteForwardingStatus string
 
 const (
-	WriteForwardingStatus_enabled   WriteForwardingStatus = "enabled"
-	WriteForwardingStatus_disabled  WriteForwardingStatus = "disabled"
-	WriteForwardingStatus_enabling  WriteForwardingStatus = "enabling"
-	WriteForwardingStatus_disabling WriteForwardingStatus = "disabling"
-	WriteForwardingStatus_unknown   WriteForwardingStatus = "unknown"
+	WriteForwardingStatus_DISABLED  WriteForwardingStatus = "DISABLED"
+	WriteForwardingStatus_DISABLING WriteForwardingStatus = "DISABLING"
+	WriteForwardingStatus_ENABLED   WriteForwardingStatus = "ENABLED"
+	WriteForwardingStatus_ENABLING  WriteForwardingStatus = "ENABLING"
+	WriteForwardingStatus_UNKNOWN   WriteForwardingStatus = "UNKNOWN"
 )

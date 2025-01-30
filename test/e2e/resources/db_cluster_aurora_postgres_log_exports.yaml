@@ -11,7 +11,7 @@ spec:
   enableCloudwatchLogsExports:
     - postgresql
   engineMode: provisioned
-  engineVersion: "14.9"
+  engineVersion: "16.4"
   masterUsername: root
   masterUserPassword:
     namespace: $MASTER_USER_PASS_SECRET_NAMESPACE

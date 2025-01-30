@@ -72,18 +72,26 @@ type DBSnapshotStatus struct {
 	// at the time of the DB snapshot.
 	// +kubebuilder:validation:Optional
 	AvailabilityZone *string `json:"availabilityZone,omitempty"`
+	// The Oracle system identifier (SID), which is the name of the Oracle database
+	// instance that manages your database files. The Oracle SID is also the name
+	// of your CDB.
+	// +kubebuilder:validation:Optional
+	DBSystemID *string `json:"dbSystemID,omitempty"`
 	// The identifier for the source DB instance, which can't be changed and which
 	// is unique to an Amazon Web Services Region.
 	// +kubebuilder:validation:Optional
 	DBIResourceID *string `json:"dbiResourceID,omitempty"`
-	// Specifies whether the DB snapshot is encrypted.
+	// Indicates whether the DB instance has a dedicated log volume (DLV) enabled.
+	// +kubebuilder:validation:Optional
+	DedicatedLogVolume *bool `json:"dedicatedLogVolume,omitempty"`
+	// Indicates whether the DB snapshot is encrypted.
 	// +kubebuilder:validation:Optional
 	Encrypted *bool `json:"encrypted,omitempty"`
 	// Specifies the name of the database engine.
 	// +kubebuilder:validation:Optional
 	Engine *string `json:"engine,omitempty"`
-	// True if mapping of Amazon Web Services Identity and Access Management (IAM)
-	// accounts to database accounts is enabled, and otherwise false.
+	// Indicates whether mapping of Amazon Web Services Identity and Access Management
+	// (IAM) accounts to database accounts is enabled.
 	// +kubebuilder:validation:Optional
 	IAMDatabaseAuthenticationEnabled *bool `json:"iamDatabaseAuthenticationEnabled,omitempty"`
 	// Specifies the time in Coordinated Universal Time (UTC) when the DB instance,
@@ -107,6 +115,10 @@ type DBSnapshotStatus struct {
 	// Provides the master username for the DB snapshot.
 	// +kubebuilder:validation:Optional
 	MasterUsername *string `json:"masterUsername,omitempty"`
+	// Indicates whether the snapshot is of a DB instance using the multi-tenant
+	// configuration (TRUE) or the single-tenant configuration (FALSE).
+	// +kubebuilder:validation:Optional
+	MultiTenant *bool `json:"multiTenant,omitempty"`
 	// Specifies the time of the CreateDBSnapshot operation in Coordinated Universal
 	// Time (UTC). Doesn't change when the snapshot is copied.
 	// +kubebuilder:validation:Optional

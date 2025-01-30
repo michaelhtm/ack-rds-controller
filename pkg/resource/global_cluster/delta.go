@@ -64,6 +64,13 @@ func newResourceDelta(
 			delta.Add("Spec.Engine", a.ko.Spec.Engine, b.ko.Spec.Engine)
 		}
 	}
+	if ackcompare.HasNilDifference(a.ko.Spec.EngineLifecycleSupport, b.ko.Spec.EngineLifecycleSupport) {
+		delta.Add("Spec.EngineLifecycleSupport", a.ko.Spec.EngineLifecycleSupport, b.ko.Spec.EngineLifecycleSupport)
+	} else if a.ko.Spec.EngineLifecycleSupport != nil && b.ko.Spec.EngineLifecycleSupport != nil {
+		if *a.ko.Spec.EngineLifecycleSupport != *b.ko.Spec.EngineLifecycleSupport {
+			delta.Add("Spec.EngineLifecycleSupport", a.ko.Spec.EngineLifecycleSupport, b.ko.Spec.EngineLifecycleSupport)
+		}
+	}
 	if ackcompare.HasNilDifference(a.ko.Spec.EngineVersion, b.ko.Spec.EngineVersion) {
 		delta.Add("Spec.EngineVersion", a.ko.Spec.EngineVersion, b.ko.Spec.EngineVersion)
 	} else if a.ko.Spec.EngineVersion != nil && b.ko.Spec.EngineVersion != nil {
@@ -90,6 +97,13 @@ func newResourceDelta(
 	} else if a.ko.Spec.StorageEncrypted != nil && b.ko.Spec.StorageEncrypted != nil {
 		if *a.ko.Spec.StorageEncrypted != *b.ko.Spec.StorageEncrypted {
 			delta.Add("Spec.StorageEncrypted", a.ko.Spec.StorageEncrypted, b.ko.Spec.StorageEncrypted)
+		}
+	}
+	if len(a.ko.Spec.Tags) != len(b.ko.Spec.Tags) {
+		delta.Add("Spec.Tags", a.ko.Spec.Tags, b.ko.Spec.Tags)
+	} else if len(a.ko.Spec.Tags) > 0 {
+		if !reflect.DeepEqual(a.ko.Spec.Tags, b.ko.Spec.Tags) {
+			delta.Add("Spec.Tags", a.ko.Spec.Tags, b.ko.Spec.Tags)
 		}
 	}
 
