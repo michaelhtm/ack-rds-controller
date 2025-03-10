@@ -23,81 +23,80 @@ import (
 // DBParameterGroupSpec defines the desired state of DBParameterGroup.
 //
 // Contains the details of an Amazon RDS DB parameter group.
-//
+// 
 // This data type is used as a response element in the DescribeDBParameterGroups
 // action.
 type DBParameterGroupSpec struct {
 
-	// The description for the DB parameter group.
-	// +kubebuilder:validation:Required
-	Description *string `json:"description"`
-	// The DB parameter group family name. A DB parameter group can be associated
-	// with one and only one DB parameter group family, and can be applied only
-	// to a DB instance running a database engine and engine version compatible
-	// with that DB parameter group family.
-	//
-	// To list all of the available parameter group families for a DB engine, use
-	// the following command:
-	//
-	// aws rds describe-db-engine-versions --query "DBEngineVersions[].DBParameterGroupFamily"
-	// --engine
-	//
-	// For example, to list all of the available parameter group families for the
-	// MySQL DB engine, use the following command:
-	//
-	// aws rds describe-db-engine-versions --query "DBEngineVersions[].DBParameterGroupFamily"
-	// --engine mysql
-	//
-	// The output contains duplicates.
-	//
-	// The following are the valid DB engine values:
-	//
-	//   - aurora-mysql
-	//
-	//   - aurora-postgresql
-	//
-	//   - db2-ae
-	//
-	//   - db2-se
-	//
-	//   - mysql
-	//
-	//   - oracle-ee
-	//
-	//   - oracle-ee-cdb
-	//
-	//   - oracle-se2
-	//
-	//   - oracle-se2-cdb
-	//
-	//   - postgres
-	//
-	//   - sqlserver-ee
-	//
-	//   - sqlserver-se
-	//
-	//   - sqlserver-ex
-	//
-	//   - sqlserver-web
-	//
-	// +kubebuilder:validation:Required
-	Family *string `json:"family"`
-	// The name of the DB parameter group.
-	//
-	// Constraints:
-	//
-	//   - Must be 1 to 255 letters, numbers, or hyphens.
-	//
-	//   - First character must be a letter
-	//
-	//   - Can't end with a hyphen or contain two consecutive hyphens
-	//
-	// This value is stored as a lowercase string.
-	// +kubebuilder:validation:Required
-	Name               *string            `json:"name"`
-	ParameterOverrides map[string]*string `json:"parameterOverrides,omitempty"`
-	// Tags to assign to the DB parameter group.
-	Tags []*Tag `json:"tags,omitempty"`
+// The description for the DB parameter group.
+// +kubebuilder:validation:Required
+Description *string `json:"description"`
+// The DB parameter group family name. A DB parameter group can be associated
+// with one and only one DB parameter group family, and can be applied only
+// to a DB instance running a database engine and engine version compatible
+// with that DB parameter group family.
+// 
+// To list all of the available parameter group families for a DB engine, use
+// the following command:
+// 
+// aws rds describe-db-engine-versions --query "DBEngineVersions[].DBParameterGroupFamily"
+// --engine
+// 
+// For example, to list all of the available parameter group families for the
+// MySQL DB engine, use the following command:
+// 
+// aws rds describe-db-engine-versions --query "DBEngineVersions[].DBParameterGroupFamily"
+// --engine mysql
+// 
+// The output contains duplicates.
+// 
+// The following are the valid DB engine values:
+// 
+//    * aurora-mysql
+// 
+//    * aurora-postgresql
+// 
+//    * db2-ae
+// 
+//    * db2-se
+// 
+//    * mysql
+// 
+//    * oracle-ee
+// 
+//    * oracle-ee-cdb
+// 
+//    * oracle-se2
+// 
+//    * oracle-se2-cdb
+// 
+//    * postgres
+// 
+//    * sqlserver-ee
+// 
+//    * sqlserver-se
+// 
+//    * sqlserver-ex
+// 
+//    * sqlserver-web
+// +kubebuilder:validation:Required
+Family *string `json:"family"`
+// The name of the DB parameter group.
+// 
+// Constraints:
+// 
+//    * Must be 1 to 255 letters, numbers, or hyphens.
+// 
+//    * First character must be a letter
+// 
+//    * Can't end with a hyphen or contain two consecutive hyphens
+// 
+// This value is stored as a lowercase string.
+// +kubebuilder:validation:Required
+Name *string `json:"name"`
+ParameterOverrides map[string]*string `json:"parameterOverrides,omitempty"`
+// Tags to assign to the DB parameter group.
+Tags []*Tag `json:"tags,omitempty"`
 }
 
 // DBParameterGroupStatus defines the observed state of DBParameterGroup
@@ -124,8 +123,8 @@ type DBParameterGroupStatus struct {
 type DBParameterGroup struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              DBParameterGroupSpec   `json:"spec,omitempty"`
-	Status            DBParameterGroupStatus `json:"status,omitempty"`
+	Spec   DBParameterGroupSpec   `json:"spec,omitempty"`
+	Status DBParameterGroupStatus `json:"status,omitempty"`
 }
 
 // DBParameterGroupList contains a list of DBParameterGroup
@@ -133,7 +132,7 @@ type DBParameterGroup struct {
 type DBParameterGroupList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []DBParameterGroup `json:"items"`
+	Items []DBParameterGroup `json:"items"`
 }
 
 func init() {

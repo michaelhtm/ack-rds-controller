@@ -25,61 +25,61 @@ import (
 // A data type representing an Aurora global database.
 type GlobalClusterSpec struct {
 
-	// The name for your database of up to 64 alphanumeric characters. If you don't
-	// specify a name, Amazon Aurora doesn't create a database in the global database
-	// cluster.
-	//
-	// Constraints:
-	//
-	//   - Can't be specified if SourceDBClusterIdentifier is specified. In this
-	//     case, Amazon Aurora uses the database name from the source DB cluster.
-	DatabaseName *string `json:"databaseName,omitempty"`
-	// Specifies whether to enable deletion protection for the new global database
-	// cluster. The global database can't be deleted when deletion protection is
-	// enabled.
-	DeletionProtection *bool `json:"deletionProtection,omitempty"`
-	// The database engine to use for this global database cluster.
-	//
-	// Valid Values: aurora-mysql | aurora-postgresql
-	//
-	// Constraints:
-	//
-	//   - Can't be specified if SourceDBClusterIdentifier is specified. In this
-	//     case, Amazon Aurora uses the engine of the source DB cluster.
-	Engine *string `json:"engine,omitempty"`
-	// The engine version to use for this global database cluster.
-	//
-	// Constraints:
-	//
-	//   - Can't be specified if SourceDBClusterIdentifier is specified. In this
-	//     case, Amazon Aurora uses the engine version of the source DB cluster.
-	EngineVersion *string `json:"engineVersion,omitempty"`
-	// The cluster identifier for this global database cluster. This parameter is
-	// stored as a lowercase string.
-	GlobalClusterIdentifier *string `json:"globalClusterIdentifier,omitempty"`
-	// The Amazon Resource Name (ARN) to use as the primary cluster of the global
-	// database.
-	//
-	// If you provide a value for this parameter, don't specify values for the following
-	// settings because Amazon Aurora uses the values from the specified source
-	// DB cluster:
-	//
-	//   - DatabaseName
-	//
-	//   - Engine
-	//
-	//   - EngineVersion
-	//
-	//   - StorageEncrypted
-	SourceDBClusterIdentifier *string `json:"sourceDBClusterIdentifier,omitempty"`
-	// Specifies whether to enable storage encryption for the new global database
-	// cluster.
-	//
-	// Constraints:
-	//
-	//   - Can't be specified if SourceDBClusterIdentifier is specified. In this
-	//     case, Amazon Aurora uses the setting from the source DB cluster.
-	StorageEncrypted *bool `json:"storageEncrypted,omitempty"`
+// The name for your database of up to 64 alphanumeric characters. If you don't
+// specify a name, Amazon Aurora doesn't create a database in the global database
+// cluster.
+// 
+// Constraints:
+// 
+//    * Can't be specified if SourceDBClusterIdentifier is specified. In this
+//    case, Amazon Aurora uses the database name from the source DB cluster.
+DatabaseName *string `json:"databaseName,omitempty"`
+// Specifies whether to enable deletion protection for the new global database
+// cluster. The global database can't be deleted when deletion protection is
+// enabled.
+DeletionProtection *bool `json:"deletionProtection,omitempty"`
+// The database engine to use for this global database cluster.
+// 
+// Valid Values: aurora-mysql | aurora-postgresql
+// 
+// Constraints:
+// 
+//    * Can't be specified if SourceDBClusterIdentifier is specified. In this
+//    case, Amazon Aurora uses the engine of the source DB cluster.
+Engine *string `json:"engine,omitempty"`
+// The engine version to use for this global database cluster.
+// 
+// Constraints:
+// 
+//    * Can't be specified if SourceDBClusterIdentifier is specified. In this
+//    case, Amazon Aurora uses the engine version of the source DB cluster.
+EngineVersion *string `json:"engineVersion,omitempty"`
+// The cluster identifier for this global database cluster. This parameter is
+// stored as a lowercase string.
+GlobalClusterIdentifier *string `json:"globalClusterIdentifier,omitempty"`
+// The Amazon Resource Name (ARN) to use as the primary cluster of the global
+// database.
+// 
+// If you provide a value for this parameter, don't specify values for the following
+// settings because Amazon Aurora uses the values from the specified source
+// DB cluster:
+// 
+//    * DatabaseName
+// 
+//    * Engine
+// 
+//    * EngineVersion
+// 
+//    * StorageEncrypted
+SourceDBClusterIdentifier *string `json:"sourceDBClusterIdentifier,omitempty"`
+// Specifies whether to enable storage encryption for the new global database
+// cluster.
+// 
+// Constraints:
+// 
+//    * Can't be specified if SourceDBClusterIdentifier is specified. In this
+//    case, Amazon Aurora uses the setting from the source DB cluster.
+StorageEncrypted *bool `json:"storageEncrypted,omitempty"`
 }
 
 // GlobalClusterStatus defines the observed state of GlobalCluster
@@ -96,23 +96,23 @@ type GlobalClusterStatus struct {
 	// +kubebuilder:validation:Optional
 	Conditions []*ackv1alpha1.Condition `json:"conditions"`
 	// The life cycle type for the global cluster.
-	//
-	// For more information, see CreateGlobalCluster.
+// 
+// For more information, see CreateGlobalCluster.
 	// +kubebuilder:validation:Optional
 	EngineLifecycleSupport *string `json:"engineLifecycleSupport,omitempty"`
 	// A data object containing all properties for the current state of an in-process
-	// or pending switchover or failover process for this global cluster (Aurora
-	// global database). This object is empty unless the SwitchoverGlobalCluster
-	// or FailoverGlobalCluster operation was called on this global cluster.
+// or pending switchover or failover process for this global cluster (Aurora
+// global database). This object is empty unless the SwitchoverGlobalCluster
+// or FailoverGlobalCluster operation was called on this global cluster.
 	// +kubebuilder:validation:Optional
 	FailoverState *FailoverState `json:"failoverState,omitempty"`
 	// The list of primary and secondary clusters within the global database cluster.
 	// +kubebuilder:validation:Optional
 	GlobalClusterMembers []*GlobalClusterMember `json:"globalClusterMembers,omitempty"`
 	// The Amazon Web Services Region-unique, immutable identifier for the global
-	// database cluster. This identifier is found in Amazon Web Services CloudTrail
-	// log entries whenever the Amazon Web Services KMS key for the DB cluster is
-	// accessed.
+// database cluster. This identifier is found in Amazon Web Services CloudTrail
+// log entries whenever the Amazon Web Services KMS key for the DB cluster is
+// accessed.
 	// +kubebuilder:validation:Optional
 	GlobalClusterResourceID *string `json:"globalClusterResourceID,omitempty"`
 	// Specifies the current state of this global database cluster.
@@ -126,8 +126,8 @@ type GlobalClusterStatus struct {
 type GlobalCluster struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              GlobalClusterSpec   `json:"spec,omitempty"`
-	Status            GlobalClusterStatus `json:"status,omitempty"`
+	Spec   GlobalClusterSpec   `json:"spec,omitempty"`
+	Status GlobalClusterStatus `json:"status,omitempty"`
 }
 
 // GlobalClusterList contains a list of GlobalCluster
@@ -135,7 +135,7 @@ type GlobalCluster struct {
 type GlobalClusterList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []GlobalCluster `json:"items"`
+	Items []GlobalCluster `json:"items"`
 }
 
 func init() {

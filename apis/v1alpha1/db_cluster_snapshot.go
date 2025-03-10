@@ -22,38 +22,38 @@ import (
 
 // DBClusterSnapshotSpec defines the desired state of DBClusterSnapshot.
 //
-// # Contains the details for an Amazon RDS DB cluster snapshot
-//
+// Contains the details for an Amazon RDS DB cluster snapshot
+// 
 // This data type is used as a response element in the DescribeDBClusterSnapshots
 // action.
 type DBClusterSnapshotSpec struct {
 
-	// The identifier of the DB cluster to create a snapshot for. This parameter
-	// isn't case-sensitive.
-	//
-	// Constraints:
-	//
-	//   - Must match the identifier of an existing DBCluster.
-	//
-	// Example: my-cluster1
-	DBClusterIdentifier    *string                                  `json:"dbClusterIdentifier,omitempty"`
-	DBClusterIdentifierRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"dbClusterIdentifierRef,omitempty"`
-	// The identifier of the DB cluster snapshot. This parameter is stored as a
-	// lowercase string.
-	//
-	// Constraints:
-	//
-	//   - Must contain from 1 to 63 letters, numbers, or hyphens.
-	//
-	//   - First character must be a letter.
-	//
-	//   - Can't end with a hyphen or contain two consecutive hyphens.
-	//
-	// Example: my-cluster1-snapshot1
-	// +kubebuilder:validation:Required
-	DBClusterSnapshotIdentifier *string `json:"dbClusterSnapshotIdentifier"`
-	// The tags to be assigned to the DB cluster snapshot.
-	Tags []*Tag `json:"tags,omitempty"`
+// The identifier of the DB cluster to create a snapshot for. This parameter
+// isn't case-sensitive.
+// 
+// Constraints:
+// 
+//    * Must match the identifier of an existing DBCluster.
+// 
+// Example: my-cluster1
+DBClusterIdentifier *string `json:"dbClusterIdentifier,omitempty"`
+DBClusterIdentifierRef *ackv1alpha1.AWSResourceReferenceWrapper `json:"dbClusterIdentifierRef,omitempty"`
+// The identifier of the DB cluster snapshot. This parameter is stored as a
+// lowercase string.
+// 
+// Constraints:
+// 
+//    * Must contain from 1 to 63 letters, numbers, or hyphens.
+// 
+//    * First character must be a letter.
+// 
+//    * Can't end with a hyphen or contain two consecutive hyphens.
+// 
+// Example: my-cluster1-snapshot1
+// +kubebuilder:validation:Required
+DBClusterSnapshotIdentifier *string `json:"dbClusterSnapshotIdentifier"`
+// The tags to be assigned to the DB cluster snapshot.
+Tags []*Tag `json:"tags,omitempty"`
 }
 
 // DBClusterSnapshotStatus defines the observed state of DBClusterSnapshot
@@ -73,7 +73,7 @@ type DBClusterSnapshotStatus struct {
 	// +kubebuilder:validation:Optional
 	AllocatedStorage *int64 `json:"allocatedStorage,omitempty"`
 	// The list of Availability Zones (AZs) where instances in the DB cluster snapshot
-	// can be restored.
+// can be restored.
 	// +kubebuilder:validation:Optional
 	AvailabilityZones []*string `json:"availabilityZones,omitempty"`
 	// The time when the DB cluster was created, in Universal Coordinated Time (UTC).
@@ -92,14 +92,14 @@ type DBClusterSnapshotStatus struct {
 	// +kubebuilder:validation:Optional
 	EngineVersion *string `json:"engineVersion,omitempty"`
 	// Indicates whether mapping of Amazon Web Services Identity and Access Management
-	// (IAM) accounts to database accounts is enabled.
+// (IAM) accounts to database accounts is enabled.
 	// +kubebuilder:validation:Optional
 	IAMDatabaseAuthenticationEnabled *bool `json:"iamDatabaseAuthenticationEnabled,omitempty"`
 	// If StorageEncrypted is true, the Amazon Web Services KMS key identifier for
-	// the encrypted DB cluster snapshot.
-	//
-	// The Amazon Web Services KMS key identifier is the key ARN, key ID, alias
-	// ARN, or alias name for the KMS key.
+// the encrypted DB cluster snapshot.
+// 
+// The Amazon Web Services KMS key identifier is the key ARN, key ID, alias
+// ARN, or alias name for the KMS key.
 	// +kubebuilder:validation:Optional
 	KMSKeyID *string `json:"kmsKeyID,omitempty"`
 	// The license model information for this DB cluster snapshot.
@@ -121,17 +121,17 @@ type DBClusterSnapshotStatus struct {
 	// +kubebuilder:validation:Optional
 	SnapshotType *string `json:"snapshotType,omitempty"`
 	// If the DB cluster snapshot was copied from a source DB cluster snapshot,
-	// the Amazon Resource Name (ARN) for the source DB cluster snapshot, otherwise,
-	// a null value.
+// the Amazon Resource Name (ARN) for the source DB cluster snapshot, otherwise,
+// a null value.
 	// +kubebuilder:validation:Optional
 	SourceDBClusterSnapshotARN *string `json:"sourceDBClusterSnapshotARN,omitempty"`
 	// The status of this DB cluster snapshot. Valid statuses are the following:
-	//
-	//    * available
-	//
-	//    * copying
-	//
-	//    * creating
+// 
+//    * available
+// 
+//    * copying
+// 
+//    * creating
 	// +kubebuilder:validation:Optional
 	Status *string `json:"status,omitempty"`
 	// Indicates whether the DB cluster snapshot is encrypted.
@@ -150,8 +150,8 @@ type DBClusterSnapshotStatus struct {
 type DBClusterSnapshot struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              DBClusterSnapshotSpec   `json:"spec,omitempty"`
-	Status            DBClusterSnapshotStatus `json:"status,omitempty"`
+	Spec   DBClusterSnapshotSpec   `json:"spec,omitempty"`
+	Status DBClusterSnapshotStatus `json:"status,omitempty"`
 }
 
 // DBClusterSnapshotList contains a list of DBClusterSnapshot
@@ -159,7 +159,7 @@ type DBClusterSnapshot struct {
 type DBClusterSnapshotList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []DBClusterSnapshot `json:"items"`
+	Items []DBClusterSnapshot `json:"items"`
 }
 
 func init() {

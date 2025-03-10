@@ -23,33 +23,33 @@ import (
 // DBSubnetGroupSpec defines the desired state of DBSubnetGroup.
 //
 // Contains the details of an Amazon RDS DB subnet group.
-//
+// 
 // This data type is used as a response element in the DescribeDBSubnetGroups
 // action.
 type DBSubnetGroupSpec struct {
 
-	// The description for the DB subnet group.
-	// +kubebuilder:validation:Required
-	Description *string `json:"description"`
-	// The name for the DB subnet group. This value is stored as a lowercase string.
-	//
-	// Constraints:
-	//
-	//   - Must contain no more than 255 letters, numbers, periods, underscores,
-	//     spaces, or hyphens.
-	//
-	//   - Must not be default.
-	//
-	//   - First character must be a letter.
-	//
-	// Example: mydbsubnetgroup
-	// +kubebuilder:validation:Required
-	Name *string `json:"name"`
-	// The EC2 Subnet IDs for the DB subnet group.
-	SubnetIDs  []*string                                  `json:"subnetIDs,omitempty"`
-	SubnetRefs []*ackv1alpha1.AWSResourceReferenceWrapper `json:"subnetRefs,omitempty"`
-	// Tags to assign to the DB subnet group.
-	Tags []*Tag `json:"tags,omitempty"`
+// The description for the DB subnet group.
+// +kubebuilder:validation:Required
+Description *string `json:"description"`
+// The name for the DB subnet group. This value is stored as a lowercase string.
+// 
+// Constraints:
+// 
+//    * Must contain no more than 255 letters, numbers, periods, underscores,
+//    spaces, or hyphens.
+// 
+//    * Must not be default.
+// 
+//    * First character must be a letter.
+// 
+// Example: mydbsubnetgroup
+// +kubebuilder:validation:Required
+Name *string `json:"name"`
+// The EC2 Subnet IDs for the DB subnet group.
+SubnetIDs []*string `json:"subnetIDs,omitempty"`
+SubnetRefs []*ackv1alpha1.AWSResourceReferenceWrapper `json:"subnetRefs,omitempty"`
+// Tags to assign to the DB subnet group.
+Tags []*Tag `json:"tags,omitempty"`
 }
 
 // DBSubnetGroupStatus defines the observed state of DBSubnetGroup
@@ -72,18 +72,18 @@ type DBSubnetGroupStatus struct {
 	// +kubebuilder:validation:Optional
 	Subnets []*Subnet `json:"subnets,omitempty"`
 	// The network type of the DB subnet group.
-	//
-	// Valid values:
-	//
-	//    * IPV4
-	//
-	//    * DUAL
-	//
-	// A DBSubnetGroup can support only the IPv4 protocol or the IPv4 and the IPv6
-	// protocols (DUAL).
-	//
-	// For more information, see Working with a DB instance in a VPC (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html)
-	// in the Amazon RDS User Guide.
+// 
+// Valid values:
+// 
+//    * IPV4
+// 
+//    * DUAL
+// 
+// A DBSubnetGroup can support only the IPv4 protocol or the IPv4 and the IPv6
+// protocols (DUAL).
+// 
+// For more information, see Working with a DB instance in a VPC (https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_VPC.WorkingWithRDSInstanceinaVPC.html)
+// in the Amazon RDS User Guide.
 	// +kubebuilder:validation:Optional
 	SupportedNetworkTypes []*string `json:"supportedNetworkTypes,omitempty"`
 	// Provides the VpcId of the DB subnet group.
@@ -97,8 +97,8 @@ type DBSubnetGroupStatus struct {
 type DBSubnetGroup struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              DBSubnetGroupSpec   `json:"spec,omitempty"`
-	Status            DBSubnetGroupStatus `json:"status,omitempty"`
+	Spec   DBSubnetGroupSpec   `json:"spec,omitempty"`
+	Status DBSubnetGroupStatus `json:"status,omitempty"`
 }
 
 // DBSubnetGroupList contains a list of DBSubnetGroup
@@ -106,7 +106,7 @@ type DBSubnetGroup struct {
 type DBSubnetGroupList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []DBSubnetGroup `json:"items"`
+	Items []DBSubnetGroup `json:"items"`
 }
 
 func init() {

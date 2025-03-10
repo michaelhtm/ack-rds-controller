@@ -23,86 +23,85 @@ import (
 // DBClusterParameterGroupSpec defines the desired state of DBClusterParameterGroup.
 //
 // Contains the details of an Amazon RDS DB cluster parameter group.
-//
+// 
 // This data type is used as a response element in the DescribeDBClusterParameterGroups
 // action.
 type DBClusterParameterGroupSpec struct {
 
-	// The description for the DB cluster parameter group.
-	// +kubebuilder:validation:Required
-	Description *string `json:"description"`
-	// The DB cluster parameter group family name. A DB cluster parameter group
-	// can be associated with one and only one DB cluster parameter group family,
-	// and can be applied only to a DB cluster running a database engine and engine
-	// version compatible with that DB cluster parameter group family.
-	//
-	// # Aurora MySQL
-	//
-	// Example: aurora-mysql5.7, aurora-mysql8.0
-	//
-	// # Aurora PostgreSQL
-	//
-	// Example: aurora-postgresql14
-	//
-	// # RDS for MySQL
-	//
-	// Example: mysql8.0
-	//
-	// # RDS for PostgreSQL
-	//
-	// Example: postgres13
-	//
-	// To list all of the available parameter group families for a DB engine, use
-	// the following command:
-	//
-	// aws rds describe-db-engine-versions --query "DBEngineVersions[].DBParameterGroupFamily"
-	// --engine
-	//
-	// For example, to list all of the available parameter group families for the
-	// Aurora PostgreSQL DB engine, use the following command:
-	//
-	// aws rds describe-db-engine-versions --query "DBEngineVersions[].DBParameterGroupFamily"
-	// --engine aurora-postgresql
-	//
-	// The output contains duplicates.
-	//
-	// The following are the valid DB engine values:
-	//
-	//   - aurora-mysql
-	//
-	//   - aurora-postgresql
-	//
-	//   - mysql
-	//
-	//   - postgres
-	//
-	// +kubebuilder:validation:Required
-	Family *string `json:"family"`
-	// The name of the DB cluster parameter group.
-	//
-	// Constraints:
-	//
-	//   - Must not match the name of an existing DB cluster parameter group.
-	//
-	// This value is stored as a lowercase string.
-	// +kubebuilder:validation:Required
-	Name               *string            `json:"name"`
-	ParameterOverrides map[string]*string `json:"parameterOverrides,omitempty"`
-	// A list of parameters in the DB cluster parameter group to modify.
-	//
-	// Valid Values (for the application method): immediate | pending-reboot
-	//
-	// You can use the immediate value with dynamic parameters only. You can use
-	// the pending-reboot value for both dynamic and static parameters.
-	//
-	// When the application method is immediate, changes to dynamic parameters are
-	// applied immediately to the DB clusters associated with the parameter group.
-	// When the application method is pending-reboot, changes to dynamic and static
-	// parameters are applied after a reboot without failover to the DB clusters
-	// associated with the parameter group.
-	Parameters []*Parameter `json:"parameters,omitempty"`
-	// Tags to assign to the DB cluster parameter group.
-	Tags []*Tag `json:"tags,omitempty"`
+// The description for the DB cluster parameter group.
+// +kubebuilder:validation:Required
+Description *string `json:"description"`
+// The DB cluster parameter group family name. A DB cluster parameter group
+// can be associated with one and only one DB cluster parameter group family,
+// and can be applied only to a DB cluster running a database engine and engine
+// version compatible with that DB cluster parameter group family.
+// 
+// Aurora MySQL
+// 
+// Example: aurora-mysql5.7, aurora-mysql8.0
+// 
+// Aurora PostgreSQL
+// 
+// Example: aurora-postgresql14
+// 
+// RDS for MySQL
+// 
+// Example: mysql8.0
+// 
+// RDS for PostgreSQL
+// 
+// Example: postgres13
+// 
+// To list all of the available parameter group families for a DB engine, use
+// the following command:
+// 
+// aws rds describe-db-engine-versions --query "DBEngineVersions[].DBParameterGroupFamily"
+// --engine
+// 
+// For example, to list all of the available parameter group families for the
+// Aurora PostgreSQL DB engine, use the following command:
+// 
+// aws rds describe-db-engine-versions --query "DBEngineVersions[].DBParameterGroupFamily"
+// --engine aurora-postgresql
+// 
+// The output contains duplicates.
+// 
+// The following are the valid DB engine values:
+// 
+//    * aurora-mysql
+// 
+//    * aurora-postgresql
+// 
+//    * mysql
+// 
+//    * postgres
+// +kubebuilder:validation:Required
+Family *string `json:"family"`
+// The name of the DB cluster parameter group.
+// 
+// Constraints:
+// 
+//    * Must not match the name of an existing DB cluster parameter group.
+// 
+// This value is stored as a lowercase string.
+// +kubebuilder:validation:Required
+Name *string `json:"name"`
+ParameterOverrides map[string]*string `json:"parameterOverrides,omitempty"`
+// A list of parameters in the DB cluster parameter group to modify.
+// 
+// Valid Values (for the application method): immediate | pending-reboot
+// 
+// You can use the immediate value with dynamic parameters only. You can use
+// the pending-reboot value for both dynamic and static parameters.
+// 
+// When the application method is immediate, changes to dynamic parameters are
+// applied immediately to the DB clusters associated with the parameter group.
+// When the application method is pending-reboot, changes to dynamic and static
+// parameters are applied after a reboot without failover to the DB clusters
+// associated with the parameter group.
+Parameters []*Parameter `json:"parameters,omitempty"`
+// Tags to assign to the DB cluster parameter group.
+Tags []*Tag `json:"tags,omitempty"`
 }
 
 // DBClusterParameterGroupStatus defines the observed state of DBClusterParameterGroup
@@ -129,8 +128,8 @@ type DBClusterParameterGroupStatus struct {
 type DBClusterParameterGroup struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              DBClusterParameterGroupSpec   `json:"spec,omitempty"`
-	Status            DBClusterParameterGroupStatus `json:"status,omitempty"`
+	Spec   DBClusterParameterGroupSpec   `json:"spec,omitempty"`
+	Status DBClusterParameterGroupStatus `json:"status,omitempty"`
 }
 
 // DBClusterParameterGroupList contains a list of DBClusterParameterGroup
@@ -138,7 +137,7 @@ type DBClusterParameterGroup struct {
 type DBClusterParameterGroupList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []DBClusterParameterGroup `json:"items"`
+	Items []DBClusterParameterGroup `json:"items"`
 }
 
 func init() {
